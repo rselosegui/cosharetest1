@@ -1,19 +1,29 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { useAuth } from '../contexts/AuthContext';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+
+  // If already authenticated, redirect to dashboard immediately
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     // Simulate auth latency
     setTimeout(() => {
+        login(); // Set persistent auth state
         setIsLoading(false);
         navigate('/dashboard');
     }, 800);
@@ -47,7 +57,7 @@ export const Login: React.FC = () => {
             <Link to="/" className="text-2xl font-bold tracking-tighter text-marketing-black block mb-2">
                c<span className="inline-block transform scale-x-[1.6] mx-1">o</span>share
             </Link>
-            <h2 className="text-sm uppercase tracking-widest text-slate-500">Partner Portal</h2>
+            <h2 className="text-sm uppercase tracking-widest text-slate-500">Profile Access</h2>
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>

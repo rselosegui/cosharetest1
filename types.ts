@@ -27,12 +27,14 @@ export enum AssetCategory {
   YACHT = 'Yacht',
   JET = 'Jet',
   SUPERBIKE = 'Superbike',
+  WATCH = 'Watch',
+  ART = 'Art',
 }
 
 export interface Asset {
   id: string;
   name: string;
-  category: AssetCategory;
+  category: AssetCategory | string;
   location: string;
   totalValue: number;
   sharePrice: number;
@@ -44,6 +46,9 @@ export interface Asset {
   specs: { label: string; value: string }[];
   isGoldenVisa?: boolean; 
   status?: string;
+  // Marketplace specific fields
+  ownerId: string; // 'system' or user ID
+  visibility: 'public' | 'private';
 }
 
 export interface SellingPoint {

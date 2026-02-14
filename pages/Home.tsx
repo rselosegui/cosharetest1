@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { AssetCard } from '../components/AssetCard';
 import { LeadCaptureModal } from '../components/LeadCaptureModal';
-import { Translation, SellingPoint, AssetCategory, Asset } from '../types';
-import { SEED_ASSETS, SELLING_POINTS } from '../constants';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Translation, AssetCategory, Asset } from '../types';
+import { SELLING_POINTS } from '../constants';
+import { useAssets } from '../contexts/AssetContext';
+import { BarChart, Bar, XAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface HomeProps {
   t: Translation;
@@ -25,12 +26,15 @@ const HERO_IMAGES = [
 export const Home: React.FC<HomeProps> = ({ t }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { getPublicAssets } = useAssets();
   
+  const allAssets = getPublicAssets();
+
   // Select specific assets for the featured section: 1 Real Estate, 1 Supercar, 1 Yacht
   const featuredAssets = [
-    SEED_ASSETS.find(a => a.category === AssetCategory.REAL_ESTATE),
-    SEED_ASSETS.find(a => a.category === AssetCategory.SUPERCAR),
-    SEED_ASSETS.find(a => a.category === AssetCategory.YACHT)
+    allAssets.find(a => a.category === AssetCategory.REAL_ESTATE),
+    allAssets.find(a => a.category === AssetCategory.SUPERCAR),
+    allAssets.find(a => a.category === AssetCategory.YACHT)
   ].filter((a): a is Asset => a !== undefined);
   
   // Cost Calculator Data Mockup

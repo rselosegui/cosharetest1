@@ -10,6 +10,8 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { BankerWidget } from './components/BankerWidget';
 import { CurrencyProvider } from './contexts/CurrencyContext';
+import { AssetProvider } from './contexts/AssetContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { TRANSLATIONS } from './constants';
 import { Language } from './types';
 
@@ -32,25 +34,29 @@ const App: React.FC = () => {
   }, [lang]);
 
   return (
-    <CurrencyProvider>
-      <HashRouter>
-        <ScrollToTop />
-        <div className={`min-h-screen flex flex-col font-sans ${lang === 'ar' ? 'font-arabic' : ''}`}>
-          <Navbar lang={lang} setLang={setLang} t={TRANSLATIONS[lang]} />
-          <main className="flex-grow">
-            <Routes>
-              <Route path="/" element={<Home t={TRANSLATIONS[lang]} />} />
-              <Route path="/marketplace" element={<Marketplace />} />
-              <Route path="/asset/:id" element={<AssetDetail />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-          </main>
-          <Footer t={TRANSLATIONS[lang]} />
-          <BankerWidget />
-        </div>
-      </HashRouter>
-    </CurrencyProvider>
+    <AuthProvider>
+      <CurrencyProvider>
+        <AssetProvider>
+          <HashRouter>
+            <ScrollToTop />
+            <div className={`min-h-screen flex flex-col font-sans ${lang === 'ar' ? 'font-arabic' : ''}`}>
+              <Navbar lang={lang} setLang={setLang} t={TRANSLATIONS[lang]} />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Home t={TRANSLATIONS[lang]} />} />
+                  <Route path="/marketplace" element={<Marketplace />} />
+                  <Route path="/asset/:id" element={<AssetDetail />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                </Routes>
+              </main>
+              <Footer t={TRANSLATIONS[lang]} />
+              <BankerWidget />
+            </div>
+          </HashRouter>
+        </AssetProvider>
+      </CurrencyProvider>
+    </AuthProvider>
   );
 };
 

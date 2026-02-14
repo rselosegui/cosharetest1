@@ -1,18 +1,20 @@
+
 import React, { useState } from 'react';
 import { AssetCard } from '../components/AssetCard';
-import { Button } from '../components/ui/Button';
-import { SEED_ASSETS } from '../constants';
 import { AssetCategory } from '../types';
+import { useAssets } from '../contexts/AssetContext';
 
 export const Marketplace: React.FC = () => {
+  const { getPublicAssets } = useAssets();
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'compact'>('grid');
 
   const categories = ['All', ...Object.values(AssetCategory)];
+  const publicAssets = getPublicAssets();
 
   const filteredAssets = activeCategory === 'All' 
-    ? SEED_ASSETS 
-    : SEED_ASSETS.filter(a => a.category === activeCategory);
+    ? publicAssets 
+    : publicAssets.filter(a => a.category === activeCategory);
 
   return (
     <div className="pt-24 min-h-screen bg-white">
@@ -52,7 +54,7 @@ export const Marketplace: React.FC = () => {
           <h1 className="text-2xl font-bold text-marketing-black">
             {activeCategory === 'All' ? 'Global Portfolio' : `${activeCategory} Collection`}
           </h1>
-          {/* Mobile view toggle could go here if needed, but keeping it simple */}
+          <p className="text-sm text-slate-500">{filteredAssets.length} Listings</p>
         </div>
 
         {filteredAssets.length > 0 ? (

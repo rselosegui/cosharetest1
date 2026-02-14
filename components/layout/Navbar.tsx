@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Language, Translation, CurrencyCode } from '../../types';
 import { useCurrency } from '../../contexts/CurrencyContext';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface NavbarProps {
   lang: Language;
@@ -16,6 +17,7 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, t }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const { currency, setCurrency } = useCurrency();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -79,11 +81,20 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, t }) => {
             >
               {lang === 'en' ? 'ع' : 'EN'}
             </button>
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="rounded-none border-zinc-200">
-                {t.navLogin}
-              </Button>
-            </Link>
+            
+            {isAuthenticated ? (
+               <Link to="/dashboard">
+                  <Button variant="ghost" size="sm" className="font-bold text-marketing-black">
+                     {t.navLogin}
+                  </Button>
+               </Link>
+            ) : (
+               <Link to="/login">
+                  <Button variant="outline" size="sm" className="rounded-none border-zinc-200">
+                    {t.navLogin}
+                  </Button>
+               </Link>
+            )}
           </div>
 
           {/* Mobile Menu Trigger */}
@@ -131,9 +142,16 @@ export const Navbar: React.FC<NavbarProps> = ({ lang, setLang, t }) => {
             >
               {lang === 'en' ? 'Switch to Arabic' : 'Switch to English'}
             </button>
-            <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full max-w-xs">
-              <Button size="lg" className="w-full">{t.navLogin}</Button>
-            </Link>
+            
+            {isAuthenticated ? (
+               <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)} className="w-full max-w-xs">
+                 <Button size="lg" className="w-full">{t.navLogin}</Button>
+               </Link>
+            ) : (
+               <Link to="/login" onClick={() => setIsMobileMenuOpen(false)} className="w-full max-w-xs">
+                 <Button size="lg" className="w-full">{t.navLogin}</Button>
+               </Link>
+            )}
           </div>
         </div>
       </div>

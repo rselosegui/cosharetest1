@@ -11,7 +11,6 @@ interface SyndicateModalProps {
 
 export const SyndicateModal: React.FC<SyndicateModalProps> = ({ isOpen, onClose, assetName }) => {
   const [step, setStep] = useState<'invite' | 'copied'>('invite');
-  const [emailList, setEmailList] = useState('');
 
   const syndicateId = Math.random().toString(36).substring(7).toUpperCase();
   const shareLink = `coshare.io/syn/${syndicateId}`;

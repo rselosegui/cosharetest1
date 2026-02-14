@@ -15,7 +15,7 @@ export const TRANSLATIONS: Record<string, Translation> = {
     navHome: "Home",
     navAssets: "Marketplace",
     navConcierge: "Concierge",
-    navLogin: "Partner Portal"
+    navLogin: "Profile"
   },
   ar: {
     heroTitle: "أصول حصرية بجزء من السعر.",
@@ -30,7 +30,7 @@ export const TRANSLATIONS: Record<string, Translation> = {
     navHome: "الرئيسية",
     navAssets: "السوق",
     navConcierge: "كونسيرج",
-    navLogin: "بوابة الشركاء"
+    navLogin: "الملف الشخصي"
   }
 };
 
@@ -41,15 +41,13 @@ export const SELLING_POINTS: SellingPoint[] = [
   { icon: "refresh-cw", title: "Smart Swap", description: "Trade weeks between assets globally." },
 ];
 
-const MOCK_DESC = "Experience the pinnacle of luxury with this meticulously curated asset. Managed by coshare's concierge team, every detail is handled to ensure your ownership experience is effortless and extraordinary. Features include state-of-the-art amenities, prime location access, and comprehensive maintenance coverage.";
-
 // Helper to get matching gallery images based on category
-const getGallery = (category: AssetCategory, mainImage: string) => {
+const getGallery = (category: AssetCategory | string, mainImage: string) => {
   // Return a set of relevant images including the main one
   return [mainImage, ...getCategoryImages(category)];
 };
 
-const getCategoryImages = (category: AssetCategory): string[] => {
+const getCategoryImages = (category: AssetCategory | string): string[] => {
   switch(category) {
     case AssetCategory.REAL_ESTATE:
       return [
@@ -93,6 +91,10 @@ const getCategoryImages = (category: AssetCategory): string[] => {
         "https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?q=80&w=1200&auto=format&fit=crop"
       ];
+    case AssetCategory.WATCH:
+      return [
+        "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?q=80&w=1200&auto=format&fit=crop"
+      ];
     default:
       return [];
   }
@@ -107,6 +109,39 @@ const PANORAMA_URLS = {
 
 // Seed Data Strategy: 5 Assets Per Category as requested
 export const SEED_ASSETS: Asset[] = [
+  // User Portfolio Assets (1 Public, 1 Private)
+  {
+    id: 'user-public-1',
+    name: 'Patek Philippe Nautilus 5711/1A',
+    category: AssetCategory.WATCH,
+    location: 'Geneva Vault',
+    totalValue: 145000,
+    sharePrice: 18125,
+    fundedPercentage: 100,
+    imageUrl: 'https://images.unsplash.com/photo-1639037233857-7977a4939a3f?q=80&w=1200&auto=format&fit=crop',
+    gallery: getGallery(AssetCategory.WATCH, 'https://images.unsplash.com/photo-1639037233857-7977a4939a3f?q=80&w=1200&auto=format&fit=crop'),
+    description: "The discontinued blue dial steel Nautilus. A horological icon. Held in a secure bonded warehouse in Geneva.",
+    specs: [{ label: 'Ref', value: '5711/1A-010' }, { label: 'Year', value: '2019' }],
+    ownerId: 'user-1',
+    visibility: 'public'
+  },
+  {
+    id: 'user-private-1',
+    name: 'Aston Martin DB4 Series II',
+    category: AssetCategory.CLASSIC,
+    location: 'London, UK',
+    totalValue: 450000,
+    sharePrice: 56250,
+    fundedPercentage: 100,
+    imageUrl: 'https://images.unsplash.com/photo-1541348263662-e068662d82af?q=80&w=1200&auto=format&fit=crop', // Generic Classic
+    gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1541348263662-e068662d82af?q=80&w=1200&auto=format&fit=crop'),
+    panoramaUrl: PANORAMA_URLS.car,
+    description: "Family heirloom. Series II with the heavy duty bumper and large oil sump. Restored in 2018.",
+    specs: [{ label: 'Year', value: '1960' }, { label: 'Engine', value: '3.7L I6' }],
+    ownerId: 'user-1',
+    visibility: 'private'
+  },
+
   // Real Estate
   {
     id: 're-1',
@@ -121,7 +156,9 @@ export const SEED_ASSETS: Asset[] = [
     panoramaUrl: PANORAMA_URLS.interior,
     description: "Located on the exclusive Frond N, this Signature Villa offers direct beach access and panoramic views of the Atlantis. Recently renovated with contemporary Italian furnishings.",
     specs: [{ label: 'Area', value: '7,000 sqft' }, { label: 'Beds', value: '6' }],
-    isGoldenVisa: true
+    isGoldenVisa: true,
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 're-2',
@@ -136,7 +173,9 @@ export const SEED_ASSETS: Asset[] = [
     panoramaUrl: PANORAMA_URLS.interior,
     description: "A triplex penthouse in the heart of Downtown, featuring a private pool and direct views of the Burj Khalifa. Includes 24/7 valet and concierge services.",
     specs: [{ label: 'View', value: 'Burj Khalifa' }, { label: 'Type', value: 'Duplex' }],
-    isGoldenVisa: true
+    isGoldenVisa: true,
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 're-3',
@@ -150,7 +189,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.REAL_ESTATE, 'https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.interior,
     description: "Ski-in/ski-out luxury chalet in the prestigious Jardin Alpin sector. Features a private spa, cinema room, and wine cellar.",
-    specs: [{ label: 'Ski-in', value: 'Yes' }, { label: 'Staff', value: 'Included' }]
+    specs: [{ label: 'Ski-in', value: 'Yes' }, { label: 'Staff', value: 'Included' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   
   // Supercars
@@ -166,7 +207,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.SUPERCAR, 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The first series production PHEV Spider from the Prancing Horse. 1000cv of power, open-top driving thrill, and zero-emission city driving mode.",
-    specs: [{ label: '0-100', value: '2.5s' }, { label: 'Engine', value: 'V8 Hybrid' }]
+    specs: [{ label: '0-100', value: '2.5s' }, { label: 'Engine', value: 'V8 Hybrid' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'sc-2',
@@ -180,7 +223,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.SUPERCAR, 'https://images.unsplash.com/photo-1544605972-e2d85f67530c?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The first High Performance Electrified Vehicle (HPEV) hybrid super sports car. A V12 engine coupled with three electric motors.",
-    specs: [{ label: 'Power', value: '1001 HP' }, { label: 'Engine', value: 'V12 Hybrid' }]
+    specs: [{ label: 'Power', value: '1001 HP' }, { label: 'Engine', value: 'V12 Hybrid' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
 
   // Classic (Restored to Vintage Sports Cars)
@@ -196,7 +241,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1511527661048-7fe2b55819a0?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "A pristine example of the automotive icon. Finished in Silver Grey Metallic with original red leather interior. Full matching numbers.",
-    specs: [{ label: 'Year', value: '1955' }, { label: 'Condition', value: 'Concours' }]
+    specs: [{ label: 'Year', value: '1955' }, { label: 'Condition', value: 'Concours' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'cl-2',
@@ -210,7 +257,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1532585640366-0e0600a94420?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The definitive 60s icon. 1967 Morris Mini-Cooper S Mk I. Rally-winning heritage in Almond Green.",
-    specs: [{ label: 'Year', value: '1967' }, { label: 'Engine', value: '1275cc' }]
+    specs: [{ label: 'Year', value: '1967' }, { label: 'Engine', value: '1275cc' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'cl-3',
@@ -224,7 +273,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1511919884226-fd3cad34687c?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "One of the earliest 911s produced. Type 901 chassis. Air-cooled flat-six, completely restored to factory specifications.",
-    specs: [{ label: 'Year', value: '1963' }, { label: 'Model', value: '901/911' }]
+    specs: [{ label: 'Year', value: '1963' }, { label: 'Model', value: '901/911' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'cl-4',
@@ -238,7 +289,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1584345604476-8ec5e12e42dd?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The original Pony Car. Wimbledon White convertible with the 289 V8 engine option. A true piece of Americana.",
-    specs: [{ label: 'Year', value: '1964' }, { label: 'Engine', value: '289 V8' }]
+    specs: [{ label: 'Year', value: '1964' }, { label: 'Engine', value: '289 V8' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'cl-5',
@@ -252,7 +305,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.CLASSIC, 'https://images.unsplash.com/photo-1622199709774-68340dfbb3df?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "1961 Series 1 3.8L Coupe. Opalescent Gunmetal with Red interior. The most beautiful car ever made.",
-    specs: [{ label: 'Year', value: '1961' }, { label: 'Engine', value: '3.8L I6' }]
+    specs: [{ label: 'Year', value: '1961' }, { label: 'Engine', value: '3.8L I6' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
 
   // Desert 4x4 (Updated with New Requests)
@@ -268,7 +323,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.OFFROAD, 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The original Geländewagen. A perfectly restored 1982 280GE with plaid interior. Unstoppable capability meets vintage utilitarian charm.",
-    specs: [{ label: 'Year', value: '1982' }, { label: 'Engine', value: '2.8L I6' }]
+    specs: [{ label: 'Year', value: '1982' }, { label: 'Engine', value: '2.8L I6' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'off-2',
@@ -282,7 +339,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.OFFROAD, 'https://images.unsplash.com/photo-1606256258909-5e1975b9671d?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "A cult classic. This pristine Jimny Sierra features the coveted open-top design and rugged lightweight chassis that defined a generation.",
-    specs: [{ label: 'Model', value: 'LJ80' }, { label: 'Roof', value: 'Soft Top' }]
+    specs: [{ label: 'Model', value: 'LJ80' }, { label: 'Roof', value: 'Soft Top' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'off-3',
@@ -296,7 +355,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.OFFROAD, 'https://images.unsplash.com/photo-1563276632-15a9957c7908?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "A unique bespoke build by Peec Studio. Reimagined for the modern era with upgraded suspension, bespoke leather interior, and electric powertrain conversion.",
-    specs: [{ label: 'Build', value: 'Custom' }, { label: 'Power', value: 'EV Conv' }]
+    specs: [{ label: 'Build', value: 'Custom' }, { label: 'Power', value: 'EV Conv' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'off-4',
@@ -310,7 +371,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.OFFROAD, 'https://images.unsplash.com/photo-1600329668735-3733c042337e?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "The definitive 4x4. Restored frame-off to museum quality in Nebula Green. Features the legendary F-engine and original jump seats.",
-    specs: [{ label: 'Year', value: '1978' }, { label: 'Engine', value: '4.2L I6' }]
+    specs: [{ label: 'Year', value: '1978' }, { label: 'Engine', value: '4.2L I6' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
   {
     id: 'off-5',
@@ -324,7 +387,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.OFFROAD, 'https://images.unsplash.com/photo-1506015391300-4802dc74de2e?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car,
     description: "A rugged icon. Late model Defender 110 configured for overland expeditions. Features pop-top tent, external cage, and winch.",
-    specs: [{ label: 'Series', value: '110' }, { label: 'Engine', value: 'Td5' }]
+    specs: [{ label: 'Series', value: '110' }, { label: 'Engine', value: 'Td5' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
 
   // Yachts
@@ -340,7 +405,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.YACHT, 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.yacht,
     description: "Italian style meets carbon fiber technology. The 88' Folgore features a revolutionary hull design and bespoke interior finishes.",
-    specs: [{ label: 'Length', value: '88 ft' }, { label: 'Cabins', value: '4' }]
+    specs: [{ label: 'Length', value: '88 ft' }, { label: 'Cabins', value: '4' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
 
   // Jets
@@ -356,7 +423,9 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.JET, 'https://images.unsplash.com/photo-1583067675402-23f27f8a32d1?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.interior,
     description: "The most advanced light jet in its class. Unmatched fuel efficiency and range, with a whisper-quiet cabin.",
-    specs: [{ label: 'Range', value: '1,547 nm' }, { label: 'Pax', value: '6' }]
+    specs: [{ label: 'Range', value: '1,547 nm' }, { label: 'Pax', value: '6' }],
+    ownerId: 'system',
+    visibility: 'public'
   },
 
   // Superbikes
@@ -372,6 +441,8 @@ export const SEED_ASSETS: Asset[] = [
     gallery: getGallery(AssetCategory.SUPERBIKE, 'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?q=80&w=1200&auto=format&fit=crop'),
     panoramaUrl: PANORAMA_URLS.car, 
     description: "The most powerful and technologically advanced production Ducati ever built. Carbon fiber frame, swingarm and wheels. 234 hp.",
-    specs: [{ label: 'Power', value: '234 HP' }, { label: 'Weight', value: '159 kg' }]
+    specs: [{ label: 'Power', value: '234 HP' }, { label: 'Weight', value: '159 kg' }],
+    ownerId: 'system',
+    visibility: 'public'
   }
 ];

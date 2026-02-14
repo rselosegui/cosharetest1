@@ -1,7 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { SEED_ASSETS } from '../constants';
 import { Button } from '../components/ui/Button';
 import { Skeleton } from '../components/ui/Skeleton';
 import { Lightbox } from '../components/ui/Lightbox';
@@ -10,9 +9,11 @@ import { LeadCaptureModal } from '../components/LeadCaptureModal';
 import { SyndicateModal } from '../components/SyndicateModal';
 import { PanoramaViewer } from '../components/PanoramaViewer';
 import { useCurrency } from '../contexts/CurrencyContext';
+import { useAssets } from '../contexts/AssetContext';
 
 export const AssetDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { getAsset, getPublicAssets } = useAssets();
   const [isLoading, setIsLoading] = useState(true);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -23,17 +24,20 @@ export const AssetDetail: React.FC = () => {
   const { formatPrice } = useCurrency();
 
   // Find current asset
-  const asset = SEED_ASSETS.find(a => a.id === id);
+  const asset = id ? getAsset(id) : undefined;
+  
+  // Public Assets for similar list
+  const publicAssets = getPublicAssets();
 
   // Filter for Similar Assets (Same category, excluding current)
-  const similarAssets = SEED_ASSETS
+  const similarAssets = publicAssets
     .filter(a => a.category === asset?.category && a.id !== asset?.id)
     .slice(0, 3);
 
   // Fallback if not enough similar assets
   const displaySimilar = similarAssets.length > 0 
     ? similarAssets 
-    : SEED_ASSETS.filter(a => a.id !== asset?.id).slice(0, 3);
+    : publicAssets.filter(a => a.id !== asset?.id).slice(0, 3);
 
   useEffect(() => {
     setIsLoading(true);

@@ -27,18 +27,6 @@ const SYMBOLS: Record<CurrencyCode, string> = {
 export const CurrencyProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [currency, setCurrency] = useState<CurrencyCode>('USD');
 
-  const formatPrice = (amountInUSD: number) => {
-    const rate = RATES[currency];
-    const value = amountInUSD * rate;
-    
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: currency === 'AED' ? 'USD' : currency, // Hack to prevent AED formatting issues in some browsers
-      currencyDisplay: 'symbol',
-      maximumFractionDigits: 0,
-    }).format(value).replace('US$', 'AED '); // Manual override if needed for AED
-  };
-
   // Helper for consistent formatting including symbol override
   const safeFormat = (amountInUSD: number) => {
      const value = amountInUSD * RATES[currency];
