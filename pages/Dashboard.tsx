@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 
 export const Dashboard: React.FC = () => {
   const { formatPrice } = useCurrency();
-  const { getUserAssets, getPublicAssets } = useAssets();
+  const { getUserAssets } = useAssets();
   const { user } = useAuth();
   
   const [isSchedulingOpen, setIsSchedulingOpen] = useState(false);
